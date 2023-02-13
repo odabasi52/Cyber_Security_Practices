@@ -66,9 +66,6 @@ class Listener:
             print(output, end="")
 
 if __name__ == "__main__":
-    my_listener = Listener("192.168.1.104","4141")
+    my_listener = Listener("0.0.0.0", 4141)
     my_listener.start_listener()
     my_listener.start_command_executer()
-
-        
-

