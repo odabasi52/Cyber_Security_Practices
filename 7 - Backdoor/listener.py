@@ -66,6 +66,7 @@ class Listener:
             print(output, end="")
 
 if __name__ == "__main__":
-    my_listener = Listener("0.0.0.0", 4141)
+    port = input("Enter the port to listen: ")
+    my_listener = Listener("0.0.0.0", int(port))
     my_listener.start_listener()
     my_listener.start_command_executer()
