@@ -29,6 +29,7 @@ class Client:
             print("No SYN-ACK received.")
 
     def data_sender_loop(self, ack_num, seq_num):
+        print("exit or quit to terminate session\n--------------------\n")
         while True:
             try:
                 user_input = input("Enter a string: ")
@@ -36,16 +37,23 @@ class Client:
                 user_input = "exit"
                   
             seq_num += 1
-            data_pkt = scp.IP(src=self.src_ip, dst=self.dst_ip)/scp.TCP(sport=self.src_port, dport=self.dst_port, flags="PA", seq=ack_num, ack=seq_num) / scp.Raw(load=user_input)
+            if user_input == "exit" or user_input == "quit":
+                data_pkt = scp.IP(src=self.src_ip, dst=self.dst_ip)/scp.TCP(sport=self.src_port, dport=self.dst_port, flags="F", seq=ack_num, ack=seq_num)
+                print("Sent FIN packet to server")
+            
+            else:
+                data_pkt = scp.IP(src=self.src_ip, dst=self.dst_ip)/scp.TCP(sport=self.src_port, dport=self.dst_port, flags="PA", seq=ack_num, ack=seq_num) / scp.Raw(load=user_input)
+                ack_num += len(user_input)
             scp.send(data_pkt)
 
-            if user_input == "exit" or user_input == "quit":
-                print("Closing client")
-                break
+            
 
             ack_pkt = scp.sniff(filter=f"tcp and src {self.dst_ip} and dst {self.src_ip} and port {self.dst_port} and port {self.src_port}", count=1)[0]
             if scp.TCP in ack_pkt and ack_pkt[scp.TCP].flags == "A":
                 print("ACK received from server")
+            elif scp.TCP in ack_pkt and ack_pkt[scp.TCP].flags == "FA":
+                print("FIN/ACK received. Session is terminated")
+                exit()
 
 def arguments():
     parser = argparse.ArgumentParser(description="TCP Connection")
