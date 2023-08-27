@@ -4,7 +4,8 @@ import argparse
 from pathlib import Path
 import netifaces as ni
 from getmac import get_mac_address
-from time import sleep
+import socket
+import ipaddress
 
 class Client:
     def __init__(self, src_ip, dst_ip, dst_port,iface, pcap=None, ):
@@ -109,12 +110,22 @@ class Client:
 
 def arguments():
     parser = argparse.ArgumentParser(description="TCP Connection")
-    parser.add_argument('-s', '--src', help="source ip address (can be spoofed ip)") 
-    parser.add_argument('-d', '--dstip', help="destination ip address")
-    parser.add_argument('-i', '--iface', help="interface to send data")
-    parser.add_argument('-p', '--port', help="destination port address") 
+    parser.add_argument('-s', '--src', help="source ip address (can be spoofed ip)",default=socket.gethostbyname(socket.gethostname())) 
+    parser.add_argument('-d', '--dstip', help="destination ip address", required=True)
+    parser.add_argument('-i', '--iface', help="interface to send data", required=True)
+    parser.add_argument('-p', '--port', help="destination port address",default="4242") 
     parser.add_argument('-c', '--pcap', help="path of .pcap", default=None) 
     return parser.parse_args()
+
+def check_ip(ip) -> bool:
+    try:
+        ip_object = ipaddress.ip_address(ip)
+        print(f"The IP address '{ip_object}' is valid.")
+        return True
+    except ValueError:
+        print(f"The IP address '{ip}' is not valid")
+        return False
+
 
 if __name__ == "__main__":
     try:
@@ -126,6 +137,19 @@ if __name__ == "__main__":
             print("interface not found.")
             exit()
 
+        if args.port.isdigit():
+            print(f"port: {args.port}")
+        else:
+            print("wrong port number, enter valid value")
+            exit()
+        
+        if not check_ip(args.dstip):
+            print("change destination IP")
+            exit()
+        elif not check_ip(args.src):
+            print("change source IP")
+            exit()
+        
         pcap = None
         if not args.pcap == None:
             pcap = Path(args.pcap)

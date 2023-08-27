@@ -97,7 +97,12 @@ class Server:
     
 if __name__ == "__main__":
     if(len(argv) == 2):
+        print(f"server port: {argv[1]}")
         server = Server(argv[1])
+        server.establish_connection()
+    elif(len(argv) == 1):
+        print("server port: 4242 [Default Port]")
+        server = Server("4242")
         server.establish_connection()
     else:
         print("Incorrect arguments")
