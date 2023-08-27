@@ -4,7 +4,6 @@ import argparse
 from pathlib import Path
 import netifaces as ni
 from getmac import get_mac_address
-import socket
 import ipaddress
 
 class Client:
@@ -110,7 +109,7 @@ class Client:
 
 def arguments():
     parser = argparse.ArgumentParser(description="TCP Connection")
-    parser.add_argument('-s', '--src', help="source ip address (can be spoofed ip)",default=socket.gethostbyname(socket.gethostname())) 
+    parser.add_argument('-s', '--src', help="source ip address (can be spoofed ip)",required=True) 
     parser.add_argument('-d', '--dstip', help="destination ip address", required=True)
     parser.add_argument('-i', '--iface', help="interface to send data", required=True)
     parser.add_argument('-p', '--port', help="destination port address",default="4242") 
