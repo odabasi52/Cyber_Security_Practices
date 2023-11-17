@@ -5,16 +5,16 @@ import time
 
 goose_msg = {
     "appId"                 : 1,
-    "gocbRef"               : b"TALHAiceF650/LLN0$GO$gcb01", # length = 26
-    "timeAllowedToLive"     : 15,                         # 2 bytes and positive
+    "gocbRef"               : b"GEDeviceF650/LLN0$GO$gcb01", # length = 26
+    "timeAllowedToLive"     : 4000,                         # 2 bytes and positive
     "datSet"                : b"GEDeviceF650/LLN0$GOOSE1",   # length = 24
     "goId"                  : b"TALHAGOOSE1",                # length = 11
-    "t"                     : 0,
+    "t"                     : time.time(),
     "stNum"                 : 1,
     "sqNum"                 : 1,
-    "simulation"            : True,
+    "simulation"            : False,
     "confRev"               : 1,
-    "ndsCom"                : True,
+    "ndsCom"                : False,
     "numDatSetEntries"      : 0,
     "allData"               : None
     #default allData in wireshark
