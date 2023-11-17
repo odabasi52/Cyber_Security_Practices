@@ -8,7 +8,7 @@ goose_msg = {
     "gocbRef"               : b"GEDeviceF650/LLN0$GO$gcb01", # length = 26
     "timeAllowedToLive"     : 4000,                         # 2 bytes and positive
     "datSet"                : b"GEDeviceF650/LLN0$GOOSE1",   # length = 24
-    "goId"                  : b"TALHAGOOSE1",                # length = 11
+    "goId"                  : b"GEDevGOOSE1",                # length = 11
     "t"                     : time.time(),
     "stNum"                 : 1,
     "sqNum"                 : 1,
