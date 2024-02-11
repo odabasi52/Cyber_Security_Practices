@@ -18,7 +18,7 @@ class OTX_Test:
 
 # TEST
 if __name__ == "__main__":
-    otx = OTX_Test("947dd2c3c7389ab6a5f8302c0389318cba166934ffe82654e3dd1fe968a02595")
+    otx = OTX_Test("OTX_API_KEY")
     search = input("Search: ")
     otx.search_pulses(search)
     otx.save_pulse_details_as_json()
